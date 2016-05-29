@@ -1,36 +1,35 @@
 package com.example.vutruong.groupproject2.utilities;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.example.vutruong.groupproject2.entity.Person;
+import com.example.vutruong.groupproject2.fragment.ProcessDialogFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by VuTruong on 23/03/2016.
  */
 public class HttpGetApiTask extends AsyncTask<String, Void, JSONArray> {
 
-    private SendingBackDataInterface data;
+    private CallbackDataInterface sendData;
     private HttpURLConnection urlConnection;
     private BufferedReader bufferedReader;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        sendData.showDialog();
+    }
 
     @Override
     protected JSONArray doInBackground(String... params) {
@@ -50,21 +49,20 @@ public class HttpGetApiTask extends AsyncTask<String, Void, JSONArray> {
             String finalJson = builder.toString();
             jsonArray = new JSONArray(finalJson);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            sendData.sendError(ex);
         } finally {
             if (urlConnection != null)
                 urlConnection.disconnect();
             try {
                 if (bufferedReader != null)
                     bufferedReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                sendData.sendError(ex);
             }
+
         }
 
         return jsonArray;
@@ -74,15 +72,19 @@ public class HttpGetApiTask extends AsyncTask<String, Void, JSONArray> {
     @Override
     protected void onPostExecute(JSONArray jsonArray) {
         super.onPostExecute(jsonArray);
-        data.sendData(jsonArray);
+        sendData.sendData(jsonArray);
+        sendData.dismissDialog();
     }
 
-    public interface SendingBackDataInterface {
+    public interface CallbackDataInterface {
         void sendData(JSONArray jsonArray);
+        void sendError(Exception ex);
+        void showDialog();
+        void dismissDialog();
     }
 
-    public void setDataInstance(SendingBackDataInterface interfaceInstance) {
-        data = interfaceInstance;
+    public void setDataInstance(CallbackDataInterface interfaceInstance) {
+        sendData = interfaceInstance;
     }
 
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.vutruong.groupproject2.R;
 import com.example.vutruong.groupproject2.entity.Person;
+import com.example.vutruong.groupproject2.entity.Project;
 
 import java.util.ArrayList;
 
@@ -50,16 +51,40 @@ public class ListPeopleAdapter extends ArrayAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final Person person = data.get(position);
-        holder.name.setText("Name: " +person.getName());
-        holder.role.setText("Role: " +person.getProject().getRole());
-        holder.project.setText("Project: "+person.getProject().getName());
-        if (person.getGender() == 0) {
-            holder.avatar.setImageResource(R.drawable.female);
+        Person person = data.get(position);
+        Project project = data.get(position).getProject();
+        if (person != null) {
+            if (person.getName() != null) {
+                holder.name.setText("Name: " + person.getName());
+            } else {
+                holder.name.setText("No name");
+            }
+
+            if (person.getGender() != null) {
+                if (!person.isMale()) {
+                    holder.avatar.setImageResource(R.drawable.female);
+                } else {
+                    holder.avatar.setImageResource(R.drawable.male);
+                }
+            } else {
+                holder.avatar.setImageResource(0);
+            }
+
+            if (project != null) {
+                holder.project.setText("Project: " + project.getName());
+                holder.role.setText("Role: " + project.getRole());
+            } else {
+                holder.project.setText("No project");
+                holder.role.setText("No role");
+            }
         } else {
-            holder.avatar.setImageResource(R.drawable.male);
+            holder.avatar.setImageResource(0);
+            holder.name.setText("No data");
+            holder.project.setText("No data");
+            holder.role.setText("No data");
         }
 
         return convertView;
     }
+
 }

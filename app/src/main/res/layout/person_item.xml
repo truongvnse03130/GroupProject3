@@ -18,8 +18,8 @@
         android:layout_margin="5dp"
         android:layout_toEndOf="@+id/avatar"
         android:layout_toRightOf="@+id/avatar"
-        android:text="Name"
-        android:textSize="17dp" />
+        android:text="@string/name"
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/project"
@@ -28,8 +28,8 @@
         android:layout_alignLeft="@+id/name"
         android:layout_alignStart="@+id/name"
         android:layout_below="@+id/name"
-        android:text="Project"
-        android:textSize="17dp" />
+        android:text="@string/project"
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/role"
@@ -39,8 +39,8 @@
         android:layout_alignStart="@+id/project"
         android:layout_below="@+id/project"
         android:layout_marginTop="5dp"
-        android:text="Role"
-        android:textSize="17dp" />
+        android:text="@string/role"
+        android:textSize="17sp" />
 
 
 </RelativeLayout>

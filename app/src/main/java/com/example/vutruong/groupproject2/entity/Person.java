@@ -3,6 +3,8 @@ package com.example.vutruong.groupproject2.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +16,12 @@ import java.util.ArrayList;
  * Created by VuTruong on 28/03/2016.
  */
 public class Person implements Parcelable {
+
+    @SerializedName("name")
     private String name;
-    private int gender;
+    @SerializedName("gender")
+    private String gender;
+    @SerializedName("projects")
     private Project project;
 
     public String getName() {
@@ -26,11 +32,11 @@ public class Person implements Parcelable {
         this.name = name;
     }
 
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -42,48 +48,8 @@ public class Person implements Parcelable {
         this.project = project;
     }
 
-    public static Person fromJson(JSONObject jsonObject) {
-        Person person = new Person();
-        try {
-            person.setName(jsonObject.getString("name"));
-            person.setGender(jsonObject.getInt("gender"));
-            JSONObject obj = jsonObject.getJSONObject("projects");
-            Project project = new Project();
-            project.setName(obj.getString("name"));
-            project.setRole(obj.getString("role"));
-            person.setProject(project);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return person;
-    }
-
-    public static ArrayList<Person> fromJson(JSONArray jsonArray) {
-        JSONObject personJson;
-        ArrayList<Person> persons = new ArrayList<>(jsonArray.length());
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                personJson = jsonArray.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
-            }
-            Person person = Person.fromJson(personJson);
-            if (person != null) {
-                persons.add(person);
-            }
-        }
-        return persons;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "project=" + project +
-                ", gender=" + gender +
-                ", name='" + name + '\'' +
-                '}';
+    public boolean isMale() {
+        return gender.equals("0");
     }
 
     @Override
@@ -94,7 +60,7 @@ public class Person implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
-        dest.writeInt(this.gender);
+        dest.writeString(this.gender);
         dest.writeParcelable(this.project, flags);
     }
 
@@ -103,7 +69,7 @@ public class Person implements Parcelable {
 
     protected Person(Parcel in) {
         this.name = in.readString();
-        this.gender = in.readInt();
+        this.gender = in.readString();
         this.project = in.readParcelable(Project.class.getClassLoader());
     }
 
