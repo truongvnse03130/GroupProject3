@@ -3,12 +3,15 @@ package com.example.vutruong.groupproject2.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by VuTruong on 28/03/2016.
  */
 public class Project implements Parcelable {
-
+    @SerializedName("name")
     private String name;
+    @SerializedName("role")
     private String role;
 
     public String getName() {
