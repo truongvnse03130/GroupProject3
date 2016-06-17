@@ -25,6 +25,7 @@ public class ListPeopleAdapter extends ArrayAdapter {
     public ListPeopleAdapter(ArrayList<Person> data, Context context) {
         super(context, R.layout.person_item, data);
         this.context = context;
+
         this.data = data;
     }
 
